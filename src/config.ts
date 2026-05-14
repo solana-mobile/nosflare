@@ -7,7 +7,7 @@ import { RelayInfo } from './types';
 // Settings below can be configured to your preferences
 
 // Pay to relay
-export const relayNpub = ""; // Use your own npub
+export const relayNpub = "npub1f5vxpgctcsxfszzpt2dyeqz8jttx69jtpmfac5zl383pepprm93shvrwk0"; // Use your own npub
 export const PAY_TO_RELAY_ENABLED = false; // Set to false to disable pay to relay
 export const RELAY_ACCESS_PRICE_SATS = 212121; // Price in SATS for relay access
 
@@ -19,7 +19,7 @@ export const AUTH_TIMEOUT_MS = 600000; // 10 minutes - how long the challenge is
 export const relayInfo: RelayInfo = {
   name: "Solana Mobile Nostr Relay",
   description: "Solana Mobile Nostr relay for remote Mobile Wallet Adapter connections",
-  pubkey: "d49a9023a21dba1b3c8306ca369bf3243d8b44b8f0b6d1196607f7b0990fa8df",
+  pubkey: "4d1860a30bc40c9808415a9a4c804792d66d164b0ed3dc505f89e21c8423d963",
   contact: "support@solanamobile.com",
   supported_nips: [1, 11, 16],
   software: "https://github.com/solana-mobile/nosflare",

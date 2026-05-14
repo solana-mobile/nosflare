@@ -68,7 +68,7 @@ __export(config_exports, {
   relayInfo: () => relayInfo,
   relayNpub: () => relayNpub
 });
-var relayNpub = "";
+var relayNpub = "npub1f5vxpgctcsxfszzpt2dyeqz8jttx69jtpmfac5zl383pepprm93shvrwk0";
 var PAY_TO_RELAY_ENABLED = false;
 var RELAY_ACCESS_PRICE_SATS = 212121;
 var AUTH_REQUIRED = false;
@@ -76,7 +76,7 @@ var AUTH_TIMEOUT_MS = 6e5;
 var relayInfo = {
   name: "Solana Mobile Nostr Relay",
   description: "Solana Mobile Nostr relay for remote Mobile Wallet Adapter connections",
-  pubkey: "d49a9023a21dba1b3c8306ca369bf3243d8b44b8f0b6d1196607f7b0990fa8df",
+  pubkey: "4d1860a30bc40c9808415a9a4c804792d66d164b0ed3dc505f89e21c8423d963",
   contact: "support@solanamobile.com",
   supported_nips: [1, 11, 16],
   software: "https://github.com/solana-mobile/nosflare",
