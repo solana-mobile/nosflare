@@ -68,19 +68,19 @@ __export(config_exports, {
   relayInfo: () => relayInfo,
   relayNpub: () => relayNpub
 });
-var relayNpub = "npub16jdfqgazrkapk0yrqm9rdxlnys7ck39c7zmdzxtxqlmmpxg04r0sd733sv";
-var PAY_TO_RELAY_ENABLED = true;
+var relayNpub = "";
+var PAY_TO_RELAY_ENABLED = false;
 var RELAY_ACCESS_PRICE_SATS = 212121;
-var AUTH_REQUIRED = true;
+var AUTH_REQUIRED = false;
 var AUTH_TIMEOUT_MS = 6e5;
 var relayInfo = {
-  name: "Nosflare",
-  description: "A serverless Nostr relay through Cloudflare Worker and D1 database",
+  name: "Solana Mobile Nostr Relay",
+  description: "Solana Mobile Nostr relay for remote Mobile Wallet Adapter connections",
   pubkey: "d49a9023a21dba1b3c8306ca369bf3243d8b44b8f0b6d1196607f7b0990fa8df",
-  contact: "lux@fed.wtf",
-  supported_nips: [1, 2, 4, 5, 9, 11, 12, 13, 15, 16, 17, 20, 22, 25, 28, 33, 40, 42, 57],
-  software: "https://github.com/Spl0itable/nosflare",
-  version: "7.9.44",
+  contact: "support@solanamobile.com",
+  supported_nips: [1, 11, 16],
+  software: "https://github.com/solana-mobile/nosflare",
+  version: "1.0.0",
   icon: "https://raw.githubusercontent.com/Spl0itable/nosflare/main/images/flare.png",
   // Optional fields (uncomment as needed):
   // banner: "https://example.com/banner.jpg",
@@ -124,8 +124,7 @@ var relayInfo = {
   // }
 };
 var nip05Users = {
-  "Luxas": "d49a9023a21dba1b3c8306ca369bf3243d8b44b8f0b6d1196607f7b0990fa8df"
-  // ... more NIP-05 verified users
+  // NIP-05 verified users
 };
 var enableAntiSpam = false;
 var enableGlobalDuplicateCheck = false;
@@ -260,26 +259,16 @@ var antiSpamKinds = /* @__PURE__ */ new Set([
   39009
   // Add other kinds you want to check for duplicates
 ]);
-var blockedPubkeys = /* @__PURE__ */ new Set([
-  "3c7f5948b5d80900046a67d8e3bf4971d6cba013abece1dd542eca223cf3dd3f",
-  "fed5c0c3c8fe8f51629a0b39951acdf040fd40f53a327ae79ee69991176ba058",
-  "e810fafa1e89cdf80cced8e013938e87e21b699b24c8570537be92aec4b12c18",
-  "05aee96dd41429a3ae97a9dac4dfc6867fdfacebca3f3bdc051e5004b0751f01",
-  "53a756bb596055219d93e888f71d936ec6c47d960320476c955efd8941af4362"
-]);
+var blockedPubkeys = /* @__PURE__ */ new Set([]);
 var allowedPubkeys = /* @__PURE__ */ new Set([
   // ... pubkeys that are explicitly allowed
 ]);
-var blockedEventKinds = /* @__PURE__ */ new Set([
-  1064
-]);
+var blockedEventKinds = /* @__PURE__ */ new Set([]);
 var allowedEventKinds = /* @__PURE__ */ new Set([
-  // ... kinds that are explicitly allowed
+  24133
+  // NIP-46
 ]);
-var blockedContent = /* @__PURE__ */ new Set([
-  "~~ hello world! ~~"
-  // ... more blocked content
-]);
+var blockedContent = /* @__PURE__ */ new Set([]);
 var checkValidNip05 = false;
 var blockedNip05Domains = /* @__PURE__ */ new Set([
   // Add domains that are explicitly blocked
@@ -299,21 +288,13 @@ var allowedTags = /* @__PURE__ */ new Set([
 var PUBKEY_RATE_LIMIT = { rate: 10 / 6e4, capacity: 10 };
 var REQ_RATE_LIMIT = { rate: 50 / 6e4, capacity: 50 };
 var excludedRateLimitKinds = /* @__PURE__ */ new Set([
-  1059
-  // ... kinds to exclude from EVENT rate limiting Ex: 1, 2, 3
+  // kinds to exclude from EVENT rate limiting Ex: 1, 2, 3
 ]);
 var DB_PRUNING_ENABLED = true;
 var DB_SIZE_THRESHOLD_GB = 9;
 var DB_PRUNE_BATCH_SIZE = 1e3;
 var DB_PRUNE_TARGET_GB = 8;
-var pruneProtectedKinds = /* @__PURE__ */ new Set([
-  0,
-  // Profile metadata
-  3,
-  // Contact list / follows
-  10002
-  // Relay list metadata
-]);
+var pruneProtectedKinds = /* @__PURE__ */ new Set([]);
 function isPubkeyAllowed(pubkey) {
   if (allowedPubkeys.size > 0 && !allowedPubkeys.has(pubkey)) {
     return false;
@@ -2939,42 +2920,50 @@ async function initializeDatabase(db) {
     `).run();
   } catch (_) {
   }
-  const dropIndexes = [
-    "idx_events_pubkey",
-    "idx_events_kind",
-    "idx_events_created_at_kind",
-    "idx_events_authors_kinds",
-    "idx_events_tag_p_created_at",
-    "idx_events_tag_e_created_at",
-    "idx_events_tag_a_created_at",
-    "idx_events_tag_t_created_at",
-    "idx_events_tag_d_created_at",
-    "idx_events_tag_r_created_at",
-    "idx_events_tag_L_created_at",
-    "idx_events_tag_s_created_at",
-    "idx_events_tag_u_created_at",
-    "idx_events_kind_tag_p",
-    "idx_events_kind_tag_e",
-    "idx_events_kind_tag_a",
-    "idx_events_kind_tag_t",
-    "idx_events_kind_tag_L",
-    "idx_events_kind_tag_s",
-    "idx_events_reply_to",
-    "idx_events_root_thread",
-    "idx_events_kind_created_at_covering",
-    "idx_events_pubkey_kind_created_at_covering",
-    "idx_events_created_at_covering",
-    "idx_events_kind_pubkey_created_at_covering",
-    "idx_tags_name_value",
-    "idx_tags_value",
-    "idx_tags_name_value_event_created"
-  ];
-  for (const idx of dropIndexes) {
-    await dropSession.prepare(`DROP INDEX IF EXISTS ${idx}`).run();
-  }
-  const dropTables = ["event_tags_cache", "mv_follow_graph", "mv_recent_notes", "mv_timeline_cache"];
-  for (const tbl of dropTables) {
-    await dropSession.prepare(`DROP TABLE IF EXISTS ${tbl}`).run();
+  const cleanupDone = await dropSession.prepare(
+    "SELECT value FROM system_config WHERE key = 'cleanup_v1' LIMIT 1"
+  ).first().catch(() => null);
+  if (!cleanupDone || cleanupDone.value !== "1") {
+    const dropIndexes = [
+      "idx_events_pubkey",
+      "idx_events_kind",
+      "idx_events_created_at_kind",
+      "idx_events_authors_kinds",
+      "idx_events_tag_p_created_at",
+      "idx_events_tag_e_created_at",
+      "idx_events_tag_a_created_at",
+      "idx_events_tag_t_created_at",
+      "idx_events_tag_d_created_at",
+      "idx_events_tag_r_created_at",
+      "idx_events_tag_L_created_at",
+      "idx_events_tag_s_created_at",
+      "idx_events_tag_u_created_at",
+      "idx_events_kind_tag_p",
+      "idx_events_kind_tag_e",
+      "idx_events_kind_tag_a",
+      "idx_events_kind_tag_t",
+      "idx_events_kind_tag_L",
+      "idx_events_kind_tag_s",
+      "idx_events_reply_to",
+      "idx_events_root_thread",
+      "idx_events_kind_created_at_covering",
+      "idx_events_pubkey_kind_created_at_covering",
+      "idx_events_created_at_covering",
+      "idx_events_kind_pubkey_created_at_covering",
+      "idx_tags_name_value",
+      "idx_tags_value",
+      "idx_tags_name_value_event_created"
+    ];
+    for (const idx of dropIndexes) {
+      await dropSession.prepare(`DROP INDEX IF EXISTS ${idx}`).run();
+    }
+    const dropTables = ["event_tags_cache", "mv_follow_graph", "mv_recent_notes", "mv_timeline_cache"];
+    for (const tbl of dropTables) {
+      await dropSession.prepare(`DROP TABLE IF EXISTS ${tbl}`).run();
+    }
+    await dropSession.prepare(
+      "INSERT OR REPLACE INTO system_config (key, value) VALUES ('cleanup_v1', '1')"
+    ).run();
   }
   try {
     const initCheck = await dropSession.prepare(
