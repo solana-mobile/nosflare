@@ -7,23 +7,23 @@ import { RelayInfo } from './types';
 // Settings below can be configured to your preferences
 
 // Pay to relay
-export const relayNpub = "npub16jdfqgazrkapk0yrqm9rdxlnys7ck39c7zmdzxtxqlmmpxg04r0sd733sv"; // Use your own npub
-export const PAY_TO_RELAY_ENABLED = true; // Set to false to disable pay to relay
+export const relayNpub = ""; // Use your own npub
+export const PAY_TO_RELAY_ENABLED = false; // Set to false to disable pay to relay
 export const RELAY_ACCESS_PRICE_SATS = 212121; // Price in SATS for relay access
 
 // NIP-42 Authentication
-export const AUTH_REQUIRED = true; // Set to false to disable NIP-42 authentication requirement
+export const AUTH_REQUIRED = false; // Set to false to disable NIP-42 authentication requirement
 export const AUTH_TIMEOUT_MS = 600000; // 10 minutes - how long the challenge is valid
 
 // Relay info
 export const relayInfo: RelayInfo = {
-  name: "Nosflare",
-  description: "A serverless Nostr relay through Cloudflare Worker and D1 database",
+  name: "Solana Mobile Nostr Relay",
+  description: "Solana Mobile Nostr relay for remote Mobile Wallet Adapter connections",
   pubkey: "d49a9023a21dba1b3c8306ca369bf3243d8b44b8f0b6d1196607f7b0990fa8df",
-  contact: "lux@fed.wtf",
-  supported_nips: [1, 2, 4, 5, 9, 11, 12, 13, 15, 16, 17, 20, 22, 25, 28, 33, 40, 42, 57],
-  software: "https://github.com/Spl0itable/nosflare",
-  version: "7.9.44",
+  contact: "support@solanamobile.com",
+  supported_nips: [1, 11, 16],
+  software: "https://github.com/solana-mobile/nosflare",
+  version: "1.0.0",
   icon: "https://raw.githubusercontent.com/Spl0itable/nosflare/main/images/flare.png",
 
   // Optional fields (uncomment as needed):
@@ -75,8 +75,7 @@ export const relayInfo: RelayInfo = {
 
 // Nostr address NIP-05 verified users (for verified checkmark like username@your-relay.com)
 export const nip05Users: Record<string, string> = {
-  "Luxas": "d49a9023a21dba1b3c8306ca369bf3243d8b44b8f0b6d1196607f7b0990fa8df",
-  // ... more NIP-05 verified users
+  // NIP-05 verified users
 };
 
 // Anti-spam settings
@@ -91,13 +90,7 @@ export const antiSpamKinds = new Set([
 
 // Blocked pubkeys
 // Add pubkeys in hex format to block write access
-export const blockedPubkeys = new Set([
-  "3c7f5948b5d80900046a67d8e3bf4971d6cba013abece1dd542eca223cf3dd3f",
-  "fed5c0c3c8fe8f51629a0b39951acdf040fd40f53a327ae79ee69991176ba058",
-  "e810fafa1e89cdf80cced8e013938e87e21b699b24c8570537be92aec4b12c18",
-  "05aee96dd41429a3ae97a9dac4dfc6867fdfacebca3f3bdc051e5004b0751f01",
-  "53a756bb596055219d93e888f71d936ec6c47d960320476c955efd8941af4362"
-]);
+export const blockedPubkeys = new Set([]);
 
 // Allowed pubkeys
 // Add pubkeys in hex format to allow write access
@@ -107,21 +100,16 @@ export const allowedPubkeys = new Set<string>([
 
 // Blocked event kinds
 // Add comma-separated kinds Ex: 1064, 4, 22242
-export const blockedEventKinds = new Set([
-  1064
-]);
+export const blockedEventKinds = new Set([]);
 
 // Allowed event kinds
 // Add comma-separated kinds Ex: 1, 2, 3
 export const allowedEventKinds = new Set<number>([
-  // ... kinds that are explicitly allowed
+  24133, // NIP-46
 ]);
 
 // Blocked words or phrases (case-insensitive)
-export const blockedContent = new Set([
-  "~~ hello world! ~~"
-  // ... more blocked content
-]);
+export const blockedContent = new Set([]);
 
 // NIP-05 validation
 export const checkValidNip05 = false; // Set to true to enable NIP-05 validation (this requires users to have a valid NIP-05 in order to publish events to the relay as part of anti-spam)
@@ -156,8 +144,7 @@ export const allowedTags = new Set<string>([
 export const PUBKEY_RATE_LIMIT = { rate: 10 / 60000, capacity: 10 }; // 10 EVENT messages per min
 export const REQ_RATE_LIMIT = { rate: 50 / 60000, capacity: 50 }; // 50 REQ messages per min
 export const excludedRateLimitKinds = new Set<number>([
-  1059
-  // ... kinds to exclude from EVENT rate limiting Ex: 1, 2, 3
+  // kinds to exclude from EVENT rate limiting Ex: 1, 2, 3
 ]);
 
 // Database pruning settings (D1 has a 10GB limit)
@@ -168,11 +155,7 @@ export const DB_PRUNE_TARGET_GB = 8; // Target size to prune down to (in GB)
 
 // Event kinds to preserve during pruning (replaceable events critical for user identity)
 // Kind 0: Profile metadata, Kind 3: Contact list, Kind 10002: Relay list
-export const pruneProtectedKinds = new Set<number>([
-  0,      // Profile metadata
-  3,      // Contact list / follows
-  10002,  // Relay list metadata
-]);
+export const pruneProtectedKinds = new Set<number>([]);
 
 // *************************** //
 // ** END EDITABLE SETTINGS ** //
