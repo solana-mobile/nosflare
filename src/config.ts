@@ -105,7 +105,7 @@ export const blockedEventKinds = new Set([]);
 // Allowed event kinds
 // Add comma-separated kinds Ex: 1, 2, 3
 export const allowedEventKinds = new Set<number>([
-  24133, // NIP-46
+  20012, // MWA
 ]);
 
 // Blocked words or phrases (case-insensitive)

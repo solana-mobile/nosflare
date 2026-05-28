@@ -265,8 +265,8 @@ var allowedPubkeys = /* @__PURE__ */ new Set([
 ]);
 var blockedEventKinds = /* @__PURE__ */ new Set([]);
 var allowedEventKinds = /* @__PURE__ */ new Set([
-  24133
-  // NIP-46
+  20012
+  // MWA
 ]);
 var blockedContent = /* @__PURE__ */ new Set([]);
 var checkValidNip05 = false;
